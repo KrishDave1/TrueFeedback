@@ -8,7 +8,7 @@ type ConnectionObject = {
 const connection: ConnectionObject = {}; // Just a reminder the Typescript object syntax is connection is name and ConnectionObject is type written after colon.
 
 async function dbConnect(): Promise<void> {
-    if (connection.isConnected) {
+    if (connection.isConnected) { // As Next.js is edge computing, it is possible that the connection is already established so we check if it is already connected
         console.log("Already connected to the database");
         return;
     }
