@@ -66,5 +66,16 @@ export async function POST(request: Request) {
         }
       );
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log("An unexpected error occurred:", error);
+    return Response.json(
+      {
+        success: false,
+        message: "Internal server error",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }
