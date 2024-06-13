@@ -28,8 +28,10 @@ export async function POST(request: Request) {
     }
 
     const existingUserByEmail = await UserModel.findOne({
+      // This is the case where user is not verified and trying to register again with same email
       email,
     });
+    // console.log("Existing User By Email", existingUserByEmail);
 
     const verifyCode = Math.floor(100000 + Math.random() * 900000).toString();
 
@@ -45,6 +47,7 @@ export async function POST(request: Request) {
           }
         );
       } else {
+        //Sent verification email again to verify the email
         // Resend Verification Email
         const hashedPassword = await bcrypt.hash(password, 10);
         existingUserByEmail.password = hashedPassword;
@@ -55,6 +58,18 @@ export async function POST(request: Request) {
         );
         await existingUserByEmail.save();
       }
+
+      // if (existingUserByEmail.username !== username) {
+      //   return Response.json(
+      //     {
+      //       success: false,
+      //       message: "Email already exists for some other user",
+      //     },
+      //     {
+      //       status: 400,
+      //     }
+      //   );
+      // }
     } else {
       const hashedPassword = await bcrypt.hash(password, 10);
       const expiryDate = new Date();
@@ -70,7 +85,6 @@ export async function POST(request: Request) {
         isAcceptingMessage: true,
         messages: [],
       });
-
       await newUser.save();
     }
 
