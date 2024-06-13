@@ -39,7 +39,7 @@ export const authOptions: NextAuthOptions = {
             user.password
           );
           if (isPasswordCorrect) {
-            return user; // Finally CredentialsProvider will return the user object
+            return user; // Finally CredentialsProvider of next-auth expects a user object to be returned if the credentials are correct
           } else {
             throw new Error("Password is incorrect");
           }
@@ -70,7 +70,7 @@ export const authOptions: NextAuthOptions = {
     },
   },
   pages: {
-    signIn: "/sign-in",
+    signIn: "/sign-in", // If we don't do this, next-auth have pages like /api/auth/signin but we want to have /sign-in so we are overriding the default pages
   },
   session: {
     strategy: "jwt",
