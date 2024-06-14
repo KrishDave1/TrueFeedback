@@ -23,6 +23,7 @@ export async function POST(request: Request) {
         }
       );
     }
+    console.log("User", user, "Code", code);
 
     const isCodeValid = user.verifyCode === code;
     const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();

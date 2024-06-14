@@ -26,7 +26,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 
-const Page = () => {
+const SignUpPage = () => {
   const [username, setUsername] = useState("");
   const [usernameMessage, setUsernameMessage] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false); //This is to prevent multiple requests to the server
@@ -199,4 +199,4 @@ const Page = () => {
   );
 };
 
-export default Page;
+export default SignUpPage;
