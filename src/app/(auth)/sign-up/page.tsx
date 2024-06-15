@@ -43,7 +43,7 @@ const SignUpPage = () => {
     },
   });
 
-  useEffect(() => {
+  useEffect(() => { // This useEffect is specifically made for checking if the username is unique using the backend route.
     const checkUsernameUnique = async () => {
       if (username) {
         setIsCheckingUsername(true);
@@ -80,7 +80,8 @@ const SignUpPage = () => {
         } else {
           toast({
             title: "Error",
-            description: "Error occurred in signing in.Please try again",
+            description: "Error occurred in signing up.Please try again",
+            variant: "destructive",
           });
         }
       } catch (error) {
@@ -89,6 +90,7 @@ const SignUpPage = () => {
           title: "Error",
           description:
             "Error occurred while fetching response from server.Please try again",
+          variant: "destructive",
         });
       } finally {
         setisSubmitting(false);
@@ -140,7 +142,7 @@ const SignUpPage = () => {
                         : "text-red-500"
                     }`}
                   >
-                    test {usernameMessage}
+                    {usernameMessage}
                   </p>
                   <FormMessage />
                 </FormItem>

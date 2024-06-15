@@ -47,8 +47,7 @@ export async function POST(request: Request) {
           }
         );
       } else {
-        //Sent verification email again to verify the email
-        // Resend Verification Email
+        //Sent verification email again to verify the user.Here password is again hashed and verify code is updated again.
         const hashedPassword = await bcrypt.hash(password, 10);
         existingUserByEmail.password = hashedPassword;
         existingUserByEmail.verifyCode = verifyCode;
@@ -59,6 +58,7 @@ export async function POST(request: Request) {
         await existingUserByEmail.save();
       }
 
+      //! This is the case where user is not verified and another user is trying to register again with same email of first person.Here we are not giving error as we are getting data only from the email and not from the username, so a bit of concern.
       // if (existingUserByEmail.username !== username) {
       //   return Response.json(
       //     {

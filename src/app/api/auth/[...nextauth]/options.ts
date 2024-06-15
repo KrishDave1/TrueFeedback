@@ -7,7 +7,7 @@ import UserModel from "@/model/User";
 import dbConnect from "@/lib/dbConnect";
 import { use } from "react";
 
-export const authOptions: NextAuthOptions = {
+export const authOptions: NextAuthOptions = { // This is the configuration object for next-auth. We are using CredentialsProvider for authentication.We can also use other providers like Google, Facebook etc.
   providers: [
     CredentialsProvider({
       id: "credentials",
@@ -20,7 +20,7 @@ export const authOptions: NextAuthOptions = {
         await dbConnect();
         try {
           const user = await UserModel.findOne({
-            $or: [
+            $or: [ // We are checking if the user exists with the given username or email
               { username: credentials.identifier },
               { email: credentials.identifier },
             ],
@@ -49,7 +49,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  callbacks: {
+  callbacks: { // Here we are passing user data first to the jwt callback and then to the session callback
     async jwt({ token, user }) {
       if (user) {
         token._id = user._id?.toString();
