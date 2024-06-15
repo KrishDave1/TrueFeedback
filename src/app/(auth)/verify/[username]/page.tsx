@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
@@ -21,18 +22,22 @@ import * as z from "zod";
 
 const VerifyAccount = () => {
   const router = useRouter();
+  const [vcode, setVCode] = React.useState("");
   const param = useParams<{ username: string }>();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof verifySchema>>({
     resolver: zodResolver(verifySchema),
+    defaultValues: {
+      code: "",
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof verifySchema>) => {
-    console.log("Data", data);
+    console.log("Form Data:", data);
     try {
       const response = await axios.post(`/api/verify-code`, {
         username: param.username,
-        verifyCode: data.code,
+        verifyCode: data.code.toString(),
       });
 
       toast({
@@ -43,6 +48,11 @@ const VerifyAccount = () => {
     } catch (error) {
       console.error("Error occurred while signing up", error);
       const err = error as AxiosError<ApiResponse>;
+      if (err.response) {
+        console.error("Response data:", err.response.data);
+        console.error("Response status:", err.response.status);
+        console.error("Response headers:", err.response.headers);
+      }
       let errorMessage = err?.response?.data.message || "Error signing up";
       toast({
         title: "Signup failed",
@@ -69,7 +79,9 @@ const VerifyAccount = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Verification Code</FormLabel>
-                  <Input placeholder='code' {...field} />
+                  <FormControl>
+                    <Input placeholder='code' {...field} />
+                  </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
