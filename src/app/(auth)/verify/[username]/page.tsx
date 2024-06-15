@@ -22,7 +22,6 @@ import * as z from "zod";
 
 const VerifyAccount = () => {
   const router = useRouter();
-  const [vcode, setVCode] = React.useState("");
   const param = useParams<{ username: string }>();
   const { toast } = useToast();
   const form = useForm<z.infer<typeof verifySchema>>({
@@ -37,7 +36,7 @@ const VerifyAccount = () => {
     try {
       const response = await axios.post(`/api/verify-code`, {
         username: param.username,
-        verifyCode: data.code.toString(),
+        code: data.code.toString(),
       });
 
       toast({

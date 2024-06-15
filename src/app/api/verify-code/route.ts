@@ -8,7 +8,6 @@ export async function POST(request: Request) {
 
   try {
     const { username, code } = await request.json();
-
     const decodedUsername = decodeURIComponent(username); // This basically decodes the username from the URL encoded format
     const user = await UserModel.findOne({ username: decodedUsername });
 
