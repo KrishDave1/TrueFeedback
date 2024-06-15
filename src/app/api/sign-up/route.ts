@@ -3,7 +3,8 @@
 import dbConnect from "@/lib/dbConnect"; // DB Connection will be required in every API Route as Next.js runs at server side
 import UserModel from "@/model/User";
 import bcrypt from "bcryptjs";
-import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+// import { sendVerificationEmail } from "@/helpers/sendVerificationEmail";
+import { sendVerificationEmail } from "@/helpers/sendVerificationEmailNodemailer";
 
 export async function POST(request: Request) {
   await dbConnect();
@@ -89,6 +90,11 @@ export async function POST(request: Request) {
     }
 
     // Send Verification Email
+    // const emailResponse = await sendVerificationEmail(
+    //   email,
+    //   username,
+    //   verifyCode
+    // );
     const emailResponse = await sendVerificationEmail(
       email,
       username,
