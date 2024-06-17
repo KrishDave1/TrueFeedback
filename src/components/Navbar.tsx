@@ -1,0 +1,77 @@
+/** @format */
+
+"use client";
+
+import React from "react";
+import Link from "next/link";
+import { useSession, signOut } from "next-auth/react";
+import { User } from "next-auth";
+import { Button } from "./ui/button";
+import { useTheme } from "next-themes";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Moon, Sun } from "lucide-react";
+
+const Navbar = () => {
+  const { data: session } = useSession(); // This session does not directly give us user data.As wrote before session does give us data but it will be inside the User given by next auth.In simple words, we get user data from User's session and not directly from session.
+
+  const user: User = session?.user as User; //Why not data.user?Because it is the way mentioned in documentation.
+
+  const { setTheme } = useTheme();
+
+  return (
+    <nav className='p-4 md:p-6 shadow-md'>
+      <div className='container mx-auto flex flex-col md:flex-row justify-between items-center'>
+        <a href='#' className='text-xl font-bold mb-4 md:mb-0'>
+          Mystery Message
+        </a>
+        {session ? (
+          <>
+            <span className='mr-4'>
+              Welcome, {user?.username || user?.email}
+            </span>
+            <Button
+              className='w-full md:w-auto'
+              onClick={() => {
+                signOut();
+              }}
+            >
+              Logout
+            </Button>
+          </>
+        ) : (
+          <Link href='/sign-in'>
+            <Button className='w-full md:w-auto'>Login</Button>
+          </Link>
+        )}
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='outline' size='icon'>
+              <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
+              <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
+              <span className='sr-only'>Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align='end'>
+            <DropdownMenuItem onClick={() => setTheme("light")}>
+              Light
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>
+              Dark
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>
+              System
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </nav>
+  );
+};
+
+export default Navbar;

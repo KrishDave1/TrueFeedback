@@ -22,11 +22,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
+import { Loader2, Moon, Sun } from "lucide-react";
 import { signInSchema } from "@/schemas/signInSchema";
 import { signIn } from "next-auth/react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { useTheme } from "next-themes";
 
 const SignInPage = () => {
+
+  const { setTheme } = useTheme();
 
   const { toast } = useToast();
   const router = useRouter();
@@ -65,6 +69,26 @@ const SignInPage = () => {
           <h1 className='text-4xl font-extrabold tracking-tight lg:text-5xl mb-6'>
             Join Mystery Message
           </h1>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='outline' size='icon'>
+                <Sun className='h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0' />
+                <Moon className='absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100' />
+                <span className='sr-only'>Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end'>
+              <DropdownMenuItem onClick={() => setTheme("light")}>
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("dark")}>
+                Dark
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => setTheme("system")}>
+                System
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
           <p className='mb-4'>Sign in to start your anonymous adventure</p>
         </div>
         <Form {...form}>
@@ -95,9 +119,7 @@ const SignInPage = () => {
                 </FormItem>
               )}
             />
-            <Button type='submit'>
-              Sign In
-            </Button>
+            <Button type='submit'>Sign In</Button>
           </form>
         </Form>
         <div className='text-center mt-4'>
