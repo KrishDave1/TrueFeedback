@@ -110,7 +110,7 @@ export default function VerificationEmail({
       <Container className='email-container'>
         <Section className='header'>
           <Img src='https://example.com/logo.png' alt='Company Logo' />
-          <Heading as='h1'>Welcome to Our Service</Heading>
+          <Heading as='h1'>Welcome to Mystery Message</Heading>
         </Section>
         <Section className='content'>
           <Heading as='h2'>Hello {username},</Heading>

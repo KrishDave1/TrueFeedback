@@ -7,7 +7,7 @@ import UserModel from "@/model/User";
 import { User } from "next-auth";
 import mongoose from "mongoose";
 
-export async function POST(request: Request) {
+export async function GET(request: Request) {
   await dbConnect();
   const session = await getServerSession(authOptions);
   const user: User = session?.user as User;
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
   try {
     const user = await UserModel.aggregate([ // aggregate is used to first split the array and then sort it and then group it back.The problem is that the messages are stored in an array,but it might be a problem in case of large number of messages or doing pagination, so we split the array to make muliple json objects and then sort them and then group them back.
       {
-        $match: { id: userId },
+        $match: { _id: userId },
       },
       {
         $unwind: "$messages",
@@ -45,11 +45,13 @@ export async function POST(request: Request) {
         },
       },
     ]);
+
+    // console.log("User", user)
     if (!user || user.length === 0) {
       return Response.json(
         {
           success: false,
-          message: "User is not found",
+          message: "User is not found or has no messages",
         },
         {
           status: 401,
@@ -62,7 +64,7 @@ export async function POST(request: Request) {
           messages: user[0].messages,
         },
         {
-          status: 401,
+          status: 200,
         }
       );
     }

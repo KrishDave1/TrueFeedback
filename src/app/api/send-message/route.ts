@@ -21,9 +21,8 @@ export async function POST(request: Request) {
         }
       );
     }
-
     // Is user accessing the messages
-    if (!user.isAcceptingMessage) {
+    if (!user.isAcceptingMessages) {
       return Response.json(
         {
           success: false,

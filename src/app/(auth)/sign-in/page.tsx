@@ -49,7 +49,7 @@ const SignInPage = () => {
       password: data.password,
       redirect: false,
     });
-    console.log(result)
+    // console.log(result)
     if (result?.error) {
       toast({
         title: "Login Failed",
