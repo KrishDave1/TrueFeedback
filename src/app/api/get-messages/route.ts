@@ -48,13 +48,24 @@ export async function GET(request: Request) {
 
     // console.log("User", user)
     if (!user || user.length === 0) {
+      if (!user) {
+        return Response.json(
+          {
+            success: false,
+            message: "User is not found.Please try again.",
+          },
+          {
+            status: 404,
+          }
+        );
+      }
       return Response.json(
         {
-          success: false,
-          message: "User is not found or has no messages",
+          success: true,
+          message: "User has no messages",
         },
         {
-          status: 401,
+          status: 200,
         }
       );
     } else {

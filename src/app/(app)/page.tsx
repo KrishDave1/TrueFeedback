@@ -26,20 +26,23 @@ const Home = () => {
           </p>
         </section>
         <Carousel
-          plugins={[AutoPlay({ delay: 2000 })]}
-          className='w-full max-w-xs'
+          plugins={[AutoPlay({ delay: 3000 })]}
+          className='w-full max-w-xl'
         >
           <CarouselContent>
             {
               messages.map((message, index) => (
                 <CarouselItem key={index}>
                   <div className='p-1'>
-                    <Card>
-                      <CardHeader>{message.title}</CardHeader>
-                      <CardContent className='flex aspect-square items-center justify-center p-6'>
-                        <span className='text-lg font-semibold'>
-                          {message.content}
-                        </span>
+                    <Card className='h-48 w-full'>
+                      <CardHeader className='text-2xl font-bold'>
+                        {message.title}
+                      </CardHeader>
+                      <CardContent className='flex items-center p-6'>
+                        <div className="flex flex-col justify-center items-start">
+                          <div className='text-lg'>{message.content}</div>
+                          <div className="text-sm font-light">{message.received}</div>
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
@@ -47,8 +50,6 @@ const Home = () => {
               )) //During a callback,if you write curly brcaeees then you have to write return keyword to return the value.So, write round brackets instead of curly braces which will automatically return the value.
             }
           </CarouselContent>
-          <CarouselPrevious />
-          <CarouselNext />
         </Carousel>
       </main>
       <footer className='text-center p-4 md:p-6'>
