@@ -21,20 +21,32 @@ import * as z from "zod";
 import React, { useState } from "react";
 import { messageSchema } from "@/schemas/messageSchema";
 import { ApiResponse } from "@/types/ApiResponse";
+import { Loader2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 const PublicPage = () => {
   const { username } = useParams(); // useParams gives us the dynamic route parameters.
   const [disabled, setDisabled] = useState(true);
+  const [messageloading, setMessageLoading] = useState(false);
+  const [suggestedLoading, setSuggestedLoading] = useState(false);
   const { toast } = useToast();
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
     defaultValues: {
       content: "",
-    }
-  })
+    },
+  });
 
   const onSubmit = async (data: z.infer<typeof messageSchema>) => {
+    setMessageLoading(true);
     try {
       const response = await axios.post(`/api/send-message`, {
         username,
@@ -50,6 +62,28 @@ const PublicPage = () => {
       let errorMessage = err?.response?.data.message || "Error sending message";
       toast({
         title: "Message Sending Failed",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setMessageLoading(false);
+    }
+  };
+
+  const handleSuggestMessages = async () => {
+    try {
+      const response = await axios.post(`/api/suggest-messages`);
+      toast({
+        title: "Suggested Messages",
+        description: response.data.message,
+      });
+    } catch (error) {
+      console.error("Error occurred while fetching suggested messages", error);
+      const err = error as AxiosError<ApiResponse>;
+      let errorMessage =
+        err?.response?.data.message || "Error fetching suggested messages";
+      toast({
+        title: "Fetching Suggested Messages Failed",
         description: errorMessage,
         variant: "destructive",
       });
@@ -93,17 +127,48 @@ const PublicPage = () => {
               </FormItem>
             )}
           />
-          <div className='text-center mt-4'>
-            {disabled ? (
-              <Button className='bg-gray-400 cursor-not-allowed hover:bg-gray-400 '>
-                Send Message
+          {messageloading && (
+            <div className='text-center mt-4'>
+              <Button>
+                <Loader2 className='animate-spin w-6 h-6' />
+                Sending Message
               </Button>
-            ) : (
-              <Button className='hover:bg-slate-700'>Send Message</Button>
-            )}
-          </div>
+            </div>
+          )}
+          {!messageloading && (
+            <div className='text-center mt-4'>
+              {disabled ? (
+                <Button className='bg-gray-400 cursor-not-allowed hover:bg-gray-400 '>
+                  Send Message
+                </Button>
+              ) : (
+                <Button className='hover:bg-slate-700 '>Send Message</Button>
+              )}
+            </div>
+          )}
         </form>
       </Form>
+      <div className='mt-16 w-full max-w-4xl grid gap-2.5'>
+        <div>
+          <Button className='flex-start'
+            onClick={
+            handleSuggestMessages
+          }>Suggest Messages</Button>
+        </div>
+        <p>Click on any message to select it</p>
+        <Card>
+          <CardHeader>
+            <CardTitle>Suggested Messages</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <Card>
+              <CardContent className="flex items-center">
+                <p>Message1</p>
+              </CardContent>
+            </Card>
+          </CardContent>
+        </Card>
+      </div>
     </main>
   );
 };
