@@ -217,7 +217,11 @@ const PublicPage = () => {
         <div>Get Your Message Board</div>
         <div>
           {" "}
-          <Button>Create Account</Button>
+          <Button
+            onClick={() => {
+              router.replace("/sign-up")
+            }}
+          >Create Account</Button>
         </div>
       </div>
     </main>
