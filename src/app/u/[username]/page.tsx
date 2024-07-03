@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { useParams } from "next/navigation";
 import axios, { AxiosError } from "axios";
+import { Separator } from "@/components/ui/separator";
 import {
   Form,
   FormControl,
@@ -30,13 +31,20 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useRouter } from "next/navigation";
 
 const PublicPage = () => {
   const { username } = useParams(); // useParams gives us the dynamic route parameters.
   const [disabled, setDisabled] = useState(true);
   const [messageloading, setMessageLoading] = useState(false);
   const [suggestedLoading, setSuggestedLoading] = useState(false);
+  const [suggestedMessages, setSuggestedMessages] = useState<string[]>([
+    "What's your favorite movie?",
+    "What's your favorite food?",
+    "Do you like to travel?",
+  ]);
   const { toast } = useToast();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
@@ -70,12 +78,26 @@ const PublicPage = () => {
     }
   };
 
+  const SuggestedMessagesArray = (message: string) => {
+    const messages = message.split("||");
+    const messagesArray: string[] = [];
+    messages.forEach((msg) => {
+      messagesArray.push(msg);
+    });
+    const messagesArrayWithoutNumbers = messagesArray.map((msg) => {
+      return msg.replace(/\d+\.|"/g, "").trim();
+    });
+    setSuggestedMessages(messagesArrayWithoutNumbers);
+  };
+
   const handleSuggestMessages = async () => {
+    setSuggestedLoading(true);
     try {
       const response = await axios.post(`/api/suggest-messages`);
+      SuggestedMessagesArray(response.data.choices[0].message.content);
       toast({
         title: "Suggested Messages",
-        description: response.data.message,
+        description: "Here are some suggested messages",
       });
     } catch (error) {
       console.error("Error occurred while fetching suggested messages", error);
@@ -87,8 +109,10 @@ const PublicPage = () => {
         description: errorMessage,
         variant: "destructive",
       });
+    } finally {
+      setSuggestedLoading(false);
     }
-  }
+  };
 
   return (
     <main className='flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12'>
@@ -150,24 +174,51 @@ const PublicPage = () => {
       </Form>
       <div className='mt-16 w-full max-w-4xl grid gap-2.5'>
         <div>
-          <Button className='flex-start'
-            onClick={
-            handleSuggestMessages
-          }>Suggest Messages</Button>
+          {suggestedLoading ? (
+            <Button>
+              <Loader2 className='animate-spin w-6 h-6' />
+              Suggesting Messages
+            </Button>
+          ) : (
+            <Button className='flex-start' onClick={handleSuggestMessages}>
+              Suggest Messages
+            </Button>
+          )}
+          {/* <Button className='flex-start' onClick={handleSuggestMessages}>
+            Suggest Messages
+          </Button> */}
         </div>
         <p>Click on any message to select it</p>
         <Card>
           <CardHeader>
             <CardTitle>Suggested Messages</CardTitle>
           </CardHeader>
-          <CardContent>
-            <Card>
-              <CardContent className="flex items-center">
-                <p>Message1</p>
-              </CardContent>
-            </Card>
+          <CardContent className='grid gap-3'>
+            {suggestedMessages.map((message, index) => (
+              <Card key={index} className='w-full'>
+                <CardContent
+                  className='flex items-center justify-center p-6 bg-white :hover cursor-pointer'
+                  onClick={() => {
+                    form.setValue("content", message); //Amazing new thing learnt
+                    setDisabled(false);
+                  }}
+                >
+                  <div className='flex flex-col justify-center items-start'>
+                    <div className='text-md'>{message}</div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </CardContent>
         </Card>
+        <Separator className='my-5' />
+      </div>
+      <div className='text-lg text-center grid gap-2'>
+        <div>Get Your Message Board</div>
+        <div>
+          {" "}
+          <Button>Create Account</Button>
+        </div>
       </div>
     </main>
   );
