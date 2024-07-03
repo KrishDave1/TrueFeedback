@@ -31,7 +31,7 @@ const Dashboard = () => {
     // This means I will filter the messages array and remove the message with the id that is passed in the argument.Here notice that server is not called to delete the message, we are just updating the UI and later we will call the server to delete the message.
     setMessages(
       messages.filter((message) => {
-        message._id !== messageId;
+        return message._id !== messageId;
       })
     );
   };
