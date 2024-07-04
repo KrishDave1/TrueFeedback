@@ -64,6 +64,7 @@ const PublicPage = () => {
         title: "Message Sent",
         description: response.data.message,
       });
+      form.setValue("content", "");
     } catch (error) {
       console.error("Error occurred while sending message", error);
       const err = error as AxiosError<ApiResponse>;
