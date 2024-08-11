@@ -4,8 +4,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import UserModel from "@/model/User";
-import dbConnect from "@/lib/dbConnect";
-import { use } from "react";
+import dbConnect from "@/lib/dbConnect";          
 
 export const authOptions: NextAuthOptions = { // This is the configuration object for next-auth. We are using CredentialsProvider for authentication.We can also use other providers like Google, Facebook etc.
   providers: [

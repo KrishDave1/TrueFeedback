@@ -23,7 +23,7 @@ export default function RootLayout({
     <html lang='en'>
       <AuthProvider>
         <body className={inter.className}>
-          <ThemeProvider
+          <ThemeProvider // For dark mode
             attribute='class'
             defaultTheme='system'
             enableSystem
