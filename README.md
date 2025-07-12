@@ -1,7 +1,3 @@
-Here’s a detailed README for your TrueFeedback project, including deeper analysis and expanded sections based on the repository’s code structure and technology stack:
-
----
-
 # TrueFeedback
 
 TrueFeedback is a robust feedback management system built primarily with TypeScript, designed for scalable, maintainable, and modern web application development. It streamlines the process of collecting, viewing, and managing feedback, making it ideal for product teams, educators, or community managers seeking actionable insights.
