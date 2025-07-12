@@ -29,15 +29,12 @@ TrueFeedback offers a seamless way to collect and analyze user feedback. It leve
 
 - **Feedback Submission:** Users can submit feedback via intuitive forms.
 - **Feedback Management:** View, filter, and search feedback entries.
-- **Dashboard Analytics:** Summarize feedback trends for actionable insights.
-- **User Authentication:** Secure login and access control (if implemented).
+- **User Authentication:** Secure login and access control.
 - **Responsive Design:** Modern CSS for mobile and desktop compatibility.
-- **Customizable Feedback Types:** Easily add or modify feedback categories.
 - **Error Handling:** Robust error management for smoother user experience.
 - **API Integration:** Modular API calls for backend communication.
 - **State Management:** Efficient handling of feedback data across components.
 - **Scalable Architecture:** Codebase structured for easy feature additions.
-- **Role-Based Access (if present):** Admin/user roles for feedback management.
 
 ---
 
